@@ -1,0 +1,25 @@
+{
+  "name": "turbo-builder",
+  "description": "An esbuild-based web builder",
+  "author": "kapla",
+  "version": "0.0.1",
+  "bin": "bin/index.ts",
+  "module": "src/index.ts",
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaplax/turbo-builder"
+  },
+  "homepage": "https://github.com/kaplax/turbo-builder",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^0.5.0"
+  },
+  "dependencies": {
+    "commander": "^10.0.0",
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.17.15",
+    "esbuild-plugin-less": "^1.2.0",
+    "typescript": "^5.0.3"
+  }
+}
