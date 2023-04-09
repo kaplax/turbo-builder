@@ -11,6 +11,9 @@ export default class Builder {
     const cc = { ...this.config };
     Reflect.deleteProperty(cc, "port");
     Reflect.deleteProperty(cc, "mode");
+    Reflect.deleteProperty(cc, "mockServe");
+    Reflect.deleteProperty(cc, "mockServePort");
+    Reflect.deleteProperty(cc, "mockDir");
     return cc;
   }
   async server() {

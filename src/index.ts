@@ -2,9 +2,11 @@ import Builder from "./builder";
 import { renderer } from "./temp";
 import { writeStaticFile } from "./file";
 import { mergeConfig, type BuilderMode, type BuilderConfig } from "./config";
+import MockServe from "./mock";
 import dotenv from "dotenv";
 
 export type { BuilderConfig } from "./config";
+export type { MockServeType } from "./mock";
 
 
 interface BuilderInitParams {
@@ -22,12 +24,7 @@ export default class FeBuilder {
   private async before(params: { port?: number, mode: BuilderMode }): Promise<BuilderConfig> {
     const { port, mode } = params;
     const mergedConfig = await mergeConfig({ port, mode });
-    // console.log(mergedConfig, `./env.${mergedConfig.mode}`)
     dotenv.config({ path: `.env.${mergedConfig.mode}` })
-    // console.log(a)
-    // console.log(process.env.BASE_URL, 'ddd')
-    // console.log(mergedConfig, 'config')
-    // dotenv.config({ path: `./env.test` });
     const content = await renderer();
     writeStaticFile(mergedConfig, content);
     return mergedConfig;
@@ -36,6 +33,10 @@ export default class FeBuilder {
     const builder = new Builder(config);
     if (config.mode === "dev") {
       builder.server();
+      if (config.mockServe) {
+        const mockServe = new MockServe(config);
+        mockServe.start();
+      }
     } else {
       builder.build();
     }

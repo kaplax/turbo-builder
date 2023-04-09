@@ -8,6 +8,9 @@ export type BuilderMode = "dev" | "test" | "prod";
 export interface BuilderConfig extends BuildOptions {
   port?: number;
   mode?: BuilderMode;
+  mockServe?: boolean;
+  mockServePort?: number;
+  mockDir?: string;
 }
 
 
@@ -22,6 +25,9 @@ const baseConfig: BuilderConfig = {
   format: "esm",
   port: 3000,
   mode: "dev",
+  mockServe: false,
+  mockServePort: 3001,
+  mockDir: "mock",
 }
 
 export async function mergeConfig(config?: BuilderConfig): Promise<BuilderConfig> {
@@ -34,6 +40,6 @@ export async function mergeConfig(config?: BuilderConfig): Promise<BuilderConfig
 
     return { ...baseConfig, ...cmdConfig, ...config };
   } catch (error) {
-    return baseConfig;
+    return { ...baseConfig, ...cmdConfig };
   }
 }
