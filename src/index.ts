@@ -22,8 +22,7 @@ export default class FeBuilder {
     this.start(config);
   }
   private async before(params: { port?: number, mode: BuilderMode }): Promise<BuilderConfig> {
-    const { port, mode } = params;
-    const mergedConfig = await mergeConfig({ port, mode });
+    const mergedConfig = await mergeConfig(params);
     dotenv.config({ path: `.env.${mergedConfig.mode}` })
     const content = await renderer();
     writeStaticFile(mergedConfig, content);

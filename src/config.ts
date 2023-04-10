@@ -38,7 +38,8 @@ export async function mergeConfig(config?: BuilderConfig): Promise<BuilderConfig
     const res = await import(configPath);
     const config = res.default;
 
-    return { ...baseConfig, ...cmdConfig, ...config };
+    return { ...baseConfig, ...config, ...cmdConfig };
+
   } catch (error) {
     return { ...baseConfig, ...cmdConfig };
   }

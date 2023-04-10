@@ -5,22 +5,23 @@ import Builder from "../src";
 
 program
   .name("web-builder")
-.description("An esbuild-based web builder")
-.version("0.0.1");
+  .description("An esbuild-based web builder")
+  .version("0.0.1");
 
 program
-.option("-p, --port <port>", "The port of server", "3000")
-.option("-m, --mode <mode>", "local or test or deployment", "local")
-.parse();
+  .option("-p, --port <port>", "The port of server")
+  .option("-m, --mode <mode>", "local or test or deployment")
+  .parse();
 
 const options = program.opts();
 
-let p  = Number(options.port);
-
-if (isNaN(p)) {
-  console.error("Expect for port be a number, but accepted a string");
-  p = 3000;
+if (options.port) {
+  options.port = Number(options.port);
+  if (isNaN(options.port)) {
+    console.error("Expect for port be a number, but accepted a string");
+    options.port = 3000;
+  }
 }
 
-new Builder(options as any);
+new Builder({ ...options } as any);
 
