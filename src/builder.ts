@@ -1,4 +1,5 @@
 import esbuild from "esbuild";
+import http from "node:http";
 import { type BuilderConfig } from "./config";
 
 
@@ -24,14 +25,35 @@ export default class Builder {
     const ctx = await esbuild.context(esbuildConf);
 
     let needNext = true;
+    let proxy: any;
 
     while (needNext) {
       try {
-        await ctx.serve({ servedir, port });
+        const { host, port: ctxPort } = await ctx.serve({ servedir });
+        proxy = http.createServer((req, res) => {
+          const forwardRequest = (path: string) => {
+            const options = {
+              host, port: ctxPort, path, method: req.method
+            }
+
+            const proxyReq = http.request(options, (proxyRes) => {
+              if (proxyRes.statusCode === 404) {
+                return forwardRequest("/")
+              }
+
+              res.writeHead(proxyRes.statusCode!, proxyRes.headers)
+              proxyRes.pipe(res, { end: true })
+            })
+
+            req.pipe(proxyReq, { end: true })
+          }
+          forwardRequest(req.url!)
+        })
+        proxy.listen(port)
         console.log("running at http://127.0.0.1:" + port);
         needNext = false;
       } catch (error) {
-        ctx.cancel();
+        proxy?.close?.();
         port += 1;
         console.error(`${port - 1} port is being used, started another port at ${port}`);
       }
