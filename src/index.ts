@@ -3,7 +3,7 @@ import { renderer } from "./temp";
 import { writeStaticFile } from "./file";
 import { mergeConfig, type BuilderMode, type BuilderConfig } from "./config";
 import MockServe from "./mock";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 
 export type { BuilderConfig } from "./config";
 export type { MockServeType } from "./mock";

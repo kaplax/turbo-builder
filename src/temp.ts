@@ -1,3 +1,5 @@
+import * as fs from "fs";
+
 function render(template: string, data: any): string {
   template = `
     with(data) {
@@ -17,7 +19,6 @@ function render(template: string, data: any): string {
 
 
 export async function renderer() {
-  const html = Bun.file("./src/index.html");
-  const text = await html.text();
+  const text = fs.readFileSync("./src/index.html");
   return render(text.toString(), globalThis);
 }

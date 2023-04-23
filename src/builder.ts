@@ -1,5 +1,5 @@
-import esbuild from "esbuild";
-import http from "node:http";
+import * as esbuild from "esbuild";
+import * as http from "http";
 import { type BuilderConfig } from "./config";
 
 

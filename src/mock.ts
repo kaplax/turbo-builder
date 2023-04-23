@@ -1,6 +1,8 @@
 import { type BuilderConfig } from "./"
-import express, { type RequestHandler } from "express";
-import cors from "cors";
+import * as express from "express";
+import * as cors from "cors";
+
+import type { RequestHandler } from "express";
 
 export type MockServeType = Record<string, RequestHandler>;
 
@@ -19,6 +21,7 @@ export default class MockServe {
       const config = res.default as Record<string, RequestHandler>;
 
       const app = express();
+
       app.use(cors());
 
       const port = this.config.mockServePort;
