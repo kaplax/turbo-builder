@@ -11,7 +11,7 @@
     "bin/*.js"
   ],
   "scripts": {
-    "build": "tsc src/*.ts bin/*.ts"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

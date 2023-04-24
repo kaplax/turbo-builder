@@ -1,7 +1,9 @@
-import { type BuilderConfig } from "./"
-import * as express from "express";
+import * as fs from "fs";
 import * as cors from "cors";
+import * as express from "express";
+import { transpileModule, ModuleKind } from "typescript";
 
+import { type BuilderConfig } from "./"
 import type { RequestHandler } from "express";
 
 export type MockServeType = Record<string, RequestHandler>;
@@ -17,8 +19,14 @@ export default class MockServe {
 
     try {
       const mockPath = `${process.cwd()}/${this.config.mockDir!}/index.ts`;
-      const res = await import(mockPath);
-      const config = res.default as Record<string, RequestHandler>;
+
+      const sourceCode = fs.readFileSync(mockPath, 'utf-8');
+      const tsToJs = transpileModule(sourceCode, {
+        compilerOptions: {
+          module: ModuleKind.CommonJS
+        }
+      })
+      const config = eval(tsToJs.outputText);
 
       const app = express();
 

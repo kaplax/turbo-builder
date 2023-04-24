@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { transpileModule, ModuleKind } from "typescript";
 import type { BuildOptions } from "esbuild";
 // @ts-ignore
 import { lessLoader } from "esbuild-plugin-less";
@@ -35,11 +37,14 @@ export async function mergeConfig(config?: BuilderConfig): Promise<BuilderConfig
   const cmdConfig = config || {} as BuilderConfig;
 
   try {
-    const res = await import(configPath);
-    const config = res.default;
-
+    const sourceCode = fs.readFileSync(configPath, 'utf-8');
+    const tsToJs = transpileModule(sourceCode, {
+      compilerOptions: {
+        module: ModuleKind.CommonJS
+      }
+    })
+    const config = eval(tsToJs.outputText);
     return { ...baseConfig, ...config, ...cmdConfig };
-
   } catch (error) {
     return { ...baseConfig, ...cmdConfig };
   }
