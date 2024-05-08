@@ -16,7 +16,6 @@ export interface BuilderConfig extends BuildOptions {
 const baseConfig: BuilderConfig = {
   entryPoints: ["src/index.tsx"],
   bundle: true,
-  inject: ["src/react-shim.tsx"],
   outdir: "build",
   splitting: true,
   allowOverwrite: true,
